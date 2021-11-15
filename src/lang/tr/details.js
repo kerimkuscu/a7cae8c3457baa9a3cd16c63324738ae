@@ -1,3 +1,4 @@
 export default {
-    page_not_found: 'Sayfa Bulunamadı'
+    room_types: 'Oda Tipleri',
+    room: 'Oda'
 }

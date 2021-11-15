@@ -1,5 +1,13 @@
-import advanced_parameters from './advanced_parameters.js';
+import general from './general';
+import navbar from './navbar';
+import index_page from './index_page';
+import details from './details';
+import reservation from './reservation';
 
 export default {
-    advanced_parameters
+    general,
+    navbar,
+    index_page,
+    details,
+    reservation
 }

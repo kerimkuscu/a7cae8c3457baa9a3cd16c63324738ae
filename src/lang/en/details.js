@@ -1,3 +1,4 @@
 export default {
-    room_type: 'Oda Tipleri'
+    room_types: 'Room Types',
+    room: 'Room'
 }

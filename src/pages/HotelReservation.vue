@@ -1,95 +1,127 @@
 <template>
-  <layout :card-header="$route.params.name">
-    <div class="col-md-12">
-      <div class="row">
-        <div class="col-md-8">
-          <div id="carouselExampleCaptions" class="carousel slide" data-bs-ride="carousel">
-            <div class="carousel-indicators">
-              <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1" />
-              <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="1" aria-label="Slide 2" />
-              <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="2" aria-label="Slide 3" />
-            </div>
-            <div class="carousel-inner">
-              <div v-for="room_type in item.room_type" :key="room_type.id" class="carousel-item" :class="{ active: parseInt(room_type.id) === 1 }">
-                <img :src="room_type.photo" class="d-block w-100" :alt="room_type.title">
-                <div class="carousel-caption d-none d-md-block">
-                  <h5>{{ room_type.title }}</h5>
-                </div>
-              </div>
-            </div>
-            <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="prev">
-              <span class="carousel-control-prev-icon" aria-hidden="true" />
-              <span class="visually-hidden">Previous</span>
-            </button>
-            <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="next">
-              <span class="carousel-control-next-icon" aria-hidden="true" />
-              <span class="visually-hidden">Next</span>
-            </button>
-          </div>
-        </div>
-        <div class="col-md-4">
-          <div class="mt-3">
-            <i class="fas fa-map-marker-alt" /> {{ item.city }}
-          </div>
+  <layout :card-header="$t('reservation.reservation_information')">
+    <form-wizard 
+      ref="form_wizard"
+      :title="''"
+      :subtitle="''"
+      shape="circle"
+      :class="'tab-content'"
+      error-color="#d9534f"
+      color="#073763"
+    >
+      <tab-content
+        :title="$t('reservation.hotel_and_date_selection')"
+        icon="far fa-calendar-alt"
+        :before-change="validateStep"
+      >
+        <hotel-and-date-selection :form="form" :hotel-lists="hotelLists" :hotel-details-lists="hotelDetailsLists" />
+      </tab-content>
 
-          <div class="mt-3 possibilities-scrollable">
-            <div v-for="possibility in item.possibilities" :key="possibility">
-              <i class="fas fa-check" /> {{ possibility }}
-            </div>
-          </div>
+      <tab-content
+        :title="$t('reservation.room_type_and_landscape_selection')"
+        icon="fas fa-bed"
+      >
+        <room-type-and-landscape-selection :form="form" :merge-hotel-lists="mergeHotelLists" />
+      </tab-content>
+
+      <tab-content
+        :title="$t('reservation.preview_and_payment_transactions')"
+        icon="far fa-credit-card"
+      >
+        Yuhuuu! This seems pretty damn simple
+      </tab-content>
+
+      <template slot="footer" slot-scope="props">
+        <div>
+          <wizard-button v-if="props.activeTabIndex > 0" class="btn btn-primary button-color" @click.native="props.prevTab">
+            <i class="fas fa-chevron-left" aria-hidden="true" /> {{ $t('general.previous') }}
+          </wizard-button>
+
+          <wizard-button v-if="!props.isLastStep" class="wizard-footer-right btn btn-primary button-color" @click.native="props.nextTab">
+            {{ $t('general.next') }} <i class="fas fa-chevron-right" aria-hidden="true" />
+          </wizard-button>
+
+          <wizard-button v-else class="wizard-footer-right btn btn-primary button-color" :style="props.fillButtonStyle" :disabled="form.processing" @click.native="props.nextTab">
+            {{ $t('general.save') }}
+          </wizard-button>
         </div>
-      </div>
-    </div>
-    <div class="header-center mt-3">
-      <p>{{ $t('details.room_types') }}</p>
-    </div>
-    <div class="col-md-12">
-      <div class="row">
-        <div v-for="room_type in item.room_type" :key="room_type.id" class="col-md-4">
-          <p> {{ room_type.title }} {{ $t('details.room') }} </p>
-          <span>{{ room_type.description }}</span>
-        </div>
-      </div>
-    </div>
+      </template>
+    </form-wizard>
   </layout>
 </template>
 
 <script>
 import Layout from '../components/Layout';
+import getHotelInformation from '../mixins/getHotelInformation';
+import {FormWizard, TabContent, WizardButton} from 'vue-form-wizard'
+import 'vue-form-wizard/dist/vue-form-wizard.min.css'
+import Form from 'form-backend-validation';
+import HotelAndDateSelection from './ReservationTabs/HotelAndDateSelection';
+import moment from 'moment';
+import RoomTypeAndLandscapeSelection from './ReservationTabs/RoomTypeAndLandscapeSelection';
 
 export default {
-  name: 'HotelDetails',
+  name: 'HotelReservation',
 
   components: {
-    Layout
+    RoomTypeAndLandscapeSelection,
+    HotelAndDateSelection,
+    Layout,
+    FormWizard,
+    TabContent,
+    WizardButton
   },
+
+  mixins: [
+      getHotelInformation
+  ],
 
   data:() => ({
-    item: [],
+    form: new Form({
+      hotel_id: null,
+      start_date: null,
+      end_date: null,
+      adult: 0,
+      child: 0,
+      room_type: null,
+      room_scenic: null,
+      price: null,
+      coupon_code: null,
+      card_name: null,
+      card_number: null,
+      card_date_month: null,
+      card_date_year: null,
+      card_cvv: null,
+    })
   }),
 
-  mounted() {
-    this.getHotelDetails();
-  },
+  methods: {
+   saveReservation() {
+     this.form.start_date = moment().format('DD-MM-YYY');
+   },
 
-  methods:{
-    async getHotelDetails() {
-      const response = await this.$http.get('https://5f6d939160cf97001641b049.mockapi.io/tkn/hotel-details/' + this.$route.params.id);
-      this.item = response.data;
+    validateStep() {
+     let returnValue;
+
+      this.form.hotel_id === null ||
+        this.form.start_date === null ||
+          this.form.end_date === null ||
+            this.form.adult === 0 ? returnValue = false : returnValue = true;
+
+      return returnValue;
     }
   }
 }
 </script>
 
 <style scoped>
-.possibilities-scrollable{
-  height: 21em;
-  overflow: auto;
+.vue-form-wizard .wizard-navigation .wizard-progress-with-circle .wizard-progress-bar{
+  background-color: #073763 !important;
+  color: #073763 !important;
 }
 
-.header-center {
-  margin: auto;
-  width: 12%;
-  font-size: 25px;
+.button-color {
+  background-color: #073763;
+  border-color: #073763;
 }
 </style>

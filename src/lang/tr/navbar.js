@@ -1,3 +1,3 @@
 export default {
-    title: 'Hotel Reservation System',
+    title: 'Otel Rezervasyon Sistemi',
 }
