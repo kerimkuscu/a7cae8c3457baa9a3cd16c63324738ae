@@ -24,6 +24,8 @@ export default {
 
         mergeHotelList() {
             this.mergeHotelLists = this.hotelLists.map(t1 => ({...t1, ...this.hotelDetailsLists.find(t2 => t2.id === t1.id)}));
+
+            localStorage.setItem('mergeHotelLists', JSON.stringify(this.mergeHotelLists));
         }
     }
 }

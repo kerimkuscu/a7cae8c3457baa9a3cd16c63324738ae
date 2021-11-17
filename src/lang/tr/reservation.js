@@ -9,5 +9,7 @@ export default {
     end_date: 'Çıkış Tarihi',
     number_of_adults: 'Yetişkin Sayısı',
     number_of_children: 'Çocuk Sayısı',
-    child_status_message: 'Çocuk ziyaretçi kabul edilmiyor!'
+    child_status_message: 'Çocuk ziyaretçi kabul edilmiyor!',
+    choosing_a_room_type: 'Oda Tipi Seçimi',
+    choosing_a_landscape: 'Manzara Seçimi',
 }

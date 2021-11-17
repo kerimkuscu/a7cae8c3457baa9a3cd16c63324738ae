@@ -14,14 +14,15 @@
         icon="far fa-calendar-alt"
         :before-change="validateStep"
       >
-        <hotel-and-date-selection :form="form" :hotel-lists="hotelLists" :hotel-details-lists="hotelDetailsLists" />
+        <hotel-and-date-selection :form="form" />
       </tab-content>
 
       <tab-content
         :title="$t('reservation.room_type_and_landscape_selection')"
         icon="fas fa-bed"
+        :before-change="validateStep"
       >
-        <room-type-and-landscape-selection :form="form" :merge-hotel-lists="mergeHotelLists" />
+        <room-type-and-landscape-selection :form="form" />
       </tab-content>
 
       <tab-content
@@ -52,13 +53,11 @@
 
 <script>
 import Layout from '../components/Layout';
-import getHotelInformation from '../mixins/getHotelInformation';
 import {FormWizard, TabContent, WizardButton} from 'vue-form-wizard'
 import 'vue-form-wizard/dist/vue-form-wizard.min.css'
-import Form from 'form-backend-validation';
 import HotelAndDateSelection from './ReservationTabs/HotelAndDateSelection';
-import moment from 'moment';
 import RoomTypeAndLandscapeSelection from './ReservationTabs/RoomTypeAndLandscapeSelection';
+import Form from 'form-backend-validation';
 
 export default {
   name: 'HotelReservation',
@@ -72,11 +71,7 @@ export default {
     WizardButton
   },
 
-  mixins: [
-      getHotelInformation
-  ],
-
-  data:() => ({
+  data: () => ({
     form: new Form({
       hotel_id: null,
       start_date: null,
@@ -96,17 +91,15 @@ export default {
   }),
 
   methods: {
-   saveReservation() {
-     this.form.start_date = moment().format('DD-MM-YYY');
-   },
-
     validateStep() {
-     let returnValue;
+      let returnValue = false;
 
-      this.form.hotel_id === null ||
-        this.form.start_date === null ||
-          this.form.end_date === null ||
-            this.form.adult === 0 ? returnValue = false : returnValue = true;
+      this.form.hotel_id !== null &&
+          this.form.start_date !== null &&
+            this.form.end_date !== null &&
+              this.form.adult !== null ? returnValue = true : returnValue = false;
+
+      returnValue === false ? this.form.errors.all() : '';
 
       return returnValue;
     }

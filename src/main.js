@@ -12,7 +12,7 @@ Vue.config.productionTip = false
 
 const i18n = new VueI18n({
   locale: window.App.locale,
-  messages: window.App.locale === 'tr' ? tr : en,
+  messages: window.App.locale === 'tr' ? tr : en
 });
 
 // axios
@@ -20,6 +20,8 @@ import axios from 'axios';
 
 window.axios = axios;
 Vue.prototype.$http = axios;
+
+window.eventHub = new Vue();
 
 // router
 import router from './router'

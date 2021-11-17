@@ -3,4 +3,5 @@ export default {
     previous: 'Önceki',
     next: 'Sonraki',
     save: 'Ödemeyi Yap Ve Bitir',
+    day: 'Gün'
 }

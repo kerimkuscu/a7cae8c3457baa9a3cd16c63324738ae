@@ -9,5 +9,7 @@ export default {
     end_date: 'Release Date',
     number_of_adults: 'Number of Adults',
     number_of_children: 'Number of Children',
-    child_status_message: 'Child visitors are not accepted!'
+    child_status_message: 'Child visitors are not accepted!',
+    choosing_a_room_type: 'Choosing a Room Type',
+    choosing_a_landscape: 'Choosing a Landscape',
 }
