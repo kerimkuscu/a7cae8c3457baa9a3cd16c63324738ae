@@ -29,7 +29,7 @@
         :title="$t('reservation.preview_and_payment_transactions')"
         icon="far fa-credit-card"
       >
-        Yuhuuu! This seems pretty damn simple
+        <preview-and-payment-transactions />
       </tab-content>
 
       <template slot="footer" slot-scope="props">
@@ -58,11 +58,13 @@ import 'vue-form-wizard/dist/vue-form-wizard.min.css'
 import HotelAndDateSelection from './ReservationTabs/HotelAndDateSelection';
 import RoomTypeAndLandscapeSelection from './ReservationTabs/RoomTypeAndLandscapeSelection';
 import Form from 'form-backend-validation';
+import PreviewAndPaymentTransactions from './ReservationTabs/PreviewAndPaymentTransactions';
 
 export default {
   name: 'HotelReservation',
 
   components: {
+    PreviewAndPaymentTransactions,
     RoomTypeAndLandscapeSelection,
     HotelAndDateSelection,
     Layout,

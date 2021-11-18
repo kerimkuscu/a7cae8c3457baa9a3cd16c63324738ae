@@ -27,21 +27,21 @@
 
     <div class="col-md-12">
       <div class="row">
-        <div v-for="item in items.room_type" :key="item.id" class="card col-md-4 p-0 m-1">
-          <div class="card-header">
-            <a href="#" class="stretched-link" style="position: relative;">
+        <div v-for="item in items.room_type" :key="item.id" class="card col-md-3 p-0 m-1">
+          <button type="button" class="btn btn-default" @click="getRoomTypeSelection(item)">
+            <div class="card-header">
               {{ item.title }}
-            </a>
-          </div>
+            </div>
 
-          <div class="card-body d-flex justify-content-center">
-            <img class="" :src="item.photo" :alt="item.title" height="300px" width="300px">
-          </div>
+            <div class="card-body d-flex justify-content-center">
+              <img class="" :src="item.photo" :alt="item.title" height="250px" width="250px">
+            </div>
 
-          <div class="card-footer d-flex justify-content-between bd-highlight mb-3">
-            <span class="d-flex justify-content-start">{{ stayDays }} {{ $t('general.day') }}</span>
-            <span class="d-flex justify-content-end">{{ stayDays * item.price }} TL</span>
-          </div>
+            <div class="card-footer d-flex justify-content-between bd-highlight">
+              <span class="d-flex justify-content-start">{{ stayDays }} {{ $t('general.day') }}</span>
+              <span class="d-flex justify-content-end">{{ stayDays * item.price }} TL</span>
+            </div>
+          </button>
         </div>
       </div>
     </div>
@@ -51,21 +51,21 @@
 
     <div class="col-md-12">
       <div class="row">
-        <div v-for="item in items.room_scenic" :key="item.id" class="card col-md-4 p-0 m-1">
-          <div class="card-header">
-            <a href="#" class="stretched-link" style="position: relative;">
+        <div v-for="item in items.room_scenic" :key="item.id" class="card col-md-3 p-0 m-1">
+          <button type="button" class="btn btn-default" @click="getRoomScenicSelection(item)">
+            <div class="card-header">
               {{ item.title }}
-            </a>
-          </div>
+            </div>
 
-          <div class="card-body d-flex justify-content-center">
-            <img class="" :src="item.photo" :alt="item.title" height="300px" width="300px">
-          </div>
+            <div class="card-body d-flex justify-content-center">
+              <img class="" :src="item.photo" :alt="item.title" height="250px" width="250px">
+            </div>
 
-          <div class="card-footer d-flex justify-content-between bd-highlight mb-3">
-            <span class="d-flex justify-content-start">{{ stayDays }} {{ $t('general.day') }}</span>
-            <span class="d-flex justify-content-end">{{ stayDays * item.price }} TL</span>
-          </div>
+            <div class="card-footer d-flex justify-content-between bd-highlight">
+              <span class="d-flex justify-content-start">{{ stayDays }} {{ $t('general.day') }}</span>
+              <span class="d-flex justify-content-end">+ {{ item.price_rate }} %</span>
+            </div>
+          </button>
         </div>
       </div>
     </div>
@@ -120,6 +120,11 @@ export default {
 
     getRoomTypeSelection(item) {
       this.form.room_type = item.id
+    },
+
+    getRoomScenicSelection(item) {
+      console.log(item);
+      this.form.room_scenic = item.id
     }
   }
 }
